@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>@Model.GetName()</title>
+  </head>
+  <body>
+    @if(Model.GetBands().Count==0)
+    {
+      <p>
+        No shows have been played here yet
+      </p>
+    }
+    else
+    {
+      <ul>
+      @foreach(var band in Model.GetBands())
+      {
+        <li><a href="/bands/@band.GetId()">@band.GetName()</a></li>
+      }
+    </ul>
+    }
+    <a href="/bands/add">Add New Band</a>
+    <a href="/">Home</a>
+  </body>
+</html>

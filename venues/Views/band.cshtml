@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>@Model.GetName()</title>
+  </head>
+  <body>
+    @if(Model.GetVenues().Count==0)
+    {
+      <p>
+        No shows have been played yet
+      </p>
+    }
+    else
+    {
+      <ul>
+      @foreach(var venue in Model.GetVenues())
+      {
+        <li><a href="/venues/@venue.GetId()">@venue.GetName()</a></li>
+      }
+    </ul>
+    }
+    <a href="/venues/add">Add New Venue</a>
+    <a href="/">Home</a>
+  </body>
+</html>
