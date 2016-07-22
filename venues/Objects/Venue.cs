@@ -209,5 +209,10 @@ namespace BandTracker.Objects
 
       return foundBands;
     }
+    public List<Band> GetEligibleBands()
+    {
+      List<Band> eligibleBands = Band.GetAll();
+      return eligibleBands;
+    }
   }
 }

@@ -56,6 +56,12 @@ namespace BandTracker
         return View["bands.cshtml", allBands];
       };
 
+      Post["/bands/{id}/showadded"] = parameters =>
+      {
+        Band currentBand = Band.Find(parameters.id);
+        currentBand.AddShow(Request.Form["venue"]);
+        return View["band.cshtml", currentBand];
+      };
 
       Get["/venues"] = _ =>
       {
@@ -90,6 +96,13 @@ namespace BandTracker
         Venue currentVenue = Venue.Find(parameters.id);
         List<Venue> allVenues = Venue.GetAll();
         return View["venues.cshtml", allVenues];
+      };
+
+      Post["/venues/{id}/showadded"] = parameters =>
+      {
+        Venue currentVenue = Venue.Find(parameters.id);
+        currentVenue.AddShow(Request.Form["band"]);
+        return View["venue.cshtml", currentVenue];
       };
     }
   }

@@ -32,6 +32,17 @@
       <input type="hidden" name="_method" value="DELETE">
       <button type="submit">Delete Venue</button>
     </form>
+    <h4>Book Show:</h4>
+    <form class="form-group" action="/venues/@Model.GetId()/showadded" method="post">
+      <label for="band">Band:</label>
+      <select name="band">
+        @foreach(var band in Model.GetEligibleBands())
+        {
+          <option value="@band.GetId()">@band.GetName()</option>
+        }
+      </select>
+      <button type="submit">Submit</button>
+    </form>
     <a href="/venues">View All Venues</a>
     <a href="/">Home</a>
   </body>
