@@ -18,6 +18,7 @@ namespace BandTracker.Tests
     public void Dispose()
     {
       Band.DeleteAll();
+      Venue.DeleteAll();
     }
 
     [Fact]

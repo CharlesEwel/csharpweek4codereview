@@ -140,7 +140,7 @@ namespace BandTracker.Objects
       SqlConnection conn = DB.Connection();
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("DELETE FROM bands WHERE id = @BandId;", conn);
+      SqlCommand cmd = new SqlCommand("DELETE FROM bands WHERE id = @BandId; DELETE FROM shows WHERE band_id = @BandId;", conn);
 
       SqlParameter bandIdParameter = new SqlParameter();
       bandIdParameter.ParameterName = "@BandId";
@@ -155,7 +155,7 @@ namespace BandTracker.Objects
     {
       SqlConnection conn = DB.Connection();
       conn.Open();
-      SqlCommand cmd = new SqlCommand("DELETE FROM bands;", conn);
+      SqlCommand cmd = new SqlCommand("DELETE FROM bands; DELETE FROM shows;", conn);
       cmd.ExecuteNonQuery();
     }
   }

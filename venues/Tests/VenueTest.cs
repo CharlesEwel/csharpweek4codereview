@@ -18,6 +18,7 @@ namespace BandTracker.Tests
     public void Dispose()
     {
       Venue.DeleteAll();
+      Band.DeleteAll();
     }
 
     [Fact]
@@ -83,6 +84,23 @@ namespace BandTracker.Tests
 
       //Assert
       Assert.Equal(expectedVenue, testVenue);
+    }
+    [Fact]
+    public void Test_AddShow_AddsAShowWithBandAndVenue()
+    {
+      //Arrange
+      Band testBand = new Band("Ween");
+      testBand.Save();
+      Venue testVenue = new Venue("Chad's");
+      testVenue.Save();
+
+      //Act
+      testVenue.AddShow(testBand.GetId());
+      List<Band> expectedBand = new List<Band> {testBand};
+      List<Band> result= testVenue.GetBands();
+
+      //Assert
+      Assert.Equal(expectedBand, result);
     }
   }
 }
