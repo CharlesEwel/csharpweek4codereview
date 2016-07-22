@@ -10,6 +10,7 @@ namespace BandTracker.Tests
 {
   public class BandTest : IDisposable
   {
+    private DateTime testDate = new DateTime(2012, 12, 21);
     public BandTest()
     {
       DBConfiguration.ConnectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=band_tracker_test;Integrated Security=SSPI;";
@@ -95,7 +96,7 @@ namespace BandTracker.Tests
       testVenue.Save();
 
       //Act
-      testVenue.AddShow(testBand.GetId());
+      testVenue.AddShow(testBand.GetId(), testDate);
       List<Venue> expectedVenue = new List<Venue> {testVenue};
       List<Venue> result= testBand.GetVenues();
 

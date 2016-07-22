@@ -59,7 +59,8 @@ namespace BandTracker
       Post["/bands/{id}/showadded"] = parameters =>
       {
         Band currentBand = Band.Find(parameters.id);
-        currentBand.AddShow(Request.Form["venue"]);
+        DateTime showDate = new DateTime(2012, 12, 21);
+        currentBand.AddShow(Request.Form["venue"], Request.Form["show-date"]);
         return View["band.cshtml", currentBand];
       };
 
@@ -101,7 +102,8 @@ namespace BandTracker
       Post["/venues/{id}/showadded"] = parameters =>
       {
         Venue currentVenue = Venue.Find(parameters.id);
-        currentVenue.AddShow(Request.Form["band"]);
+        DateTime showDate = new DateTime(2012, 12, 21);
+        currentVenue.AddShow(Request.Form["band"], Request.Form["show-date"]);
         return View["venue.cshtml", currentVenue];
       };
     }

@@ -5,7 +5,8 @@
     <title>@Model.GetName()</title>
   </head>
   <body>
-    <h4>Shows:</h4>
+    <h1>@Model.GetName()</h1>
+    <h2>Shows:</h2>
     @if(Model.GetBands().Count==0)
     {
       <p>
@@ -15,9 +16,9 @@
     else
     {
       <ul>
-      @foreach(var band in Model.GetBands())
+      @for(int i=0; i < Model.GetBands().Count; i++)
       {
-        <li><a href="/bands/@band.GetId()">@band.GetName()</a></li>
+        <li><a href="/bands/@Model.GetBands()[i].GetId()">@Model.GetBands()[i].GetName()</a>  @Model.GetShowDates()[i]</li>
       }
     </ul>
     }
@@ -41,6 +42,8 @@
           <option value="@band.GetId()">@band.GetName()</option>
         }
       </select>
+      <label for="show-date">Show Date:</label>
+      <input type="datetime-local" name="show-date" required>
       <button type="submit">Submit</button>
     </form>
     <a href="/venues">View All Venues</a>

@@ -158,12 +158,12 @@ namespace BandTracker.Objects
       SqlCommand cmd = new SqlCommand("DELETE FROM bands; DELETE FROM shows;", conn);
       cmd.ExecuteNonQuery();
     }
-    public void AddShow(int venueId)
+    public void AddShow(int venueId, DateTime date)
     {
       SqlConnection conn = DB.Connection();
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("INSERT INTO shows (venue_id, band_id) VALUES (@VenueId, @BandId);", conn);
+      SqlCommand cmd = new SqlCommand("INSERT INTO shows (venue_id, band_id, date) VALUES (@VenueId, @BandId, @Date);", conn);
 
       SqlParameter venueIdParameter = new SqlParameter();
       venueIdParameter.ParameterName = "@VenueId";
@@ -175,6 +175,11 @@ namespace BandTracker.Objects
       bandIdParameter.Value = this.GetId();
       cmd.Parameters.Add(bandIdParameter);
 
+      SqlParameter dateParameter = new SqlParameter();
+      dateParameter.ParameterName = "@Date";
+      dateParameter.Value = date;
+      cmd.Parameters.Add(dateParameter);
+
       cmd.ExecuteNonQuery();
 
       if(conn!=null) conn.Close();
@@ -185,7 +190,7 @@ namespace BandTracker.Objects
       SqlDataReader rdr = null;
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("SELECT venues.* FROM bands JOIN shows ON (shows.band_id = bands.id) JOIN venues ON (shows.venue_id = venues.id) WHERE band_id = @BandId;", conn);
+      SqlCommand cmd = new SqlCommand("SELECT venues.* FROM bands JOIN shows ON (shows.band_id = bands.id) JOIN venues ON (shows.venue_id = venues.id) WHERE band_id = @BandId ORDER BY shows.date;", conn);
 
       SqlParameter bandIdParameter = new SqlParameter();
       bandIdParameter.ParameterName = "@BandId";
@@ -208,6 +213,32 @@ namespace BandTracker.Objects
       if(conn!=null) conn.Close();
 
       return foundVenues;
+    }
+    public List<DateTime> GetShowDates()
+    {
+      SqlConnection conn = DB.Connection();
+      SqlDataReader rdr;
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("SELECT date FROM shows WHERE band_id = @BandId ORDER BY date;", conn);
+
+      SqlParameter bandIdParameter = new SqlParameter();
+      bandIdParameter.ParameterName = "@BandId";
+      bandIdParameter.Value = this.GetId();
+      cmd.Parameters.Add(bandIdParameter);
+
+      DateTime foundDate = new DateTime(2011, 11, 11);
+      rdr = cmd.ExecuteReader();
+
+      List<DateTime> showDates = new List<DateTime>{};
+      while(rdr.Read())
+      {
+        foundDate = rdr.GetDateTime(0);
+        showDates.Add(foundDate);
+      }
+      if (rdr != null) rdr.Close();
+      if (conn != null) conn.Close();
+      return showDates;
     }
     public List<Venue> GetEligibleVenues()
     {
