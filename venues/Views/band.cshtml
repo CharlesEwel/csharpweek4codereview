@@ -8,7 +8,7 @@
     @if(Model.GetVenues().Count==0)
     {
       <p>
-        No shows have been played yet
+        No shows have been played by this band yet
       </p>
     }
     else
@@ -20,7 +20,18 @@
       }
     </ul>
     }
-    <a href="/venues/add">Add New Venue</a>
+    <h4>Edit Band</h4>
+    <form class="form-group" action="/bands/@Model.GetId()" method="post">
+      <input type="hidden" name="_method" value="PATCH">
+      <label for="band-name">Band Name:</label>
+      <input type="text" name="band-name" required value="@Model.GetName()">
+      <button type="submit">Submit</button>
+    </form>
+    <form action="/bands/@Model.GetId()" method="post">
+      <input type="hidden" name="_method" value="DELETE">
+      <button type="submit">Delete Band</button>
+    </form>
+    <a href="/bands">View All Bands</a>
     <a href="/">Home</a>
   </body>
 </html>
