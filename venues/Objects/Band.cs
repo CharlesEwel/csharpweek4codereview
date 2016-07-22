@@ -158,5 +158,35 @@ namespace BandTracker.Objects
       SqlCommand cmd = new SqlCommand("DELETE FROM bands; DELETE FROM shows;", conn);
       cmd.ExecuteNonQuery();
     }
+    public List<Venue> GetVenues()
+    {
+      SqlConnection conn = DB.Connection();
+      SqlDataReader rdr = null;
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("SELECT venues.* FROM bands JOIN shows ON (shows.band_id = bands.id) JOIN venues ON (shows.venue_id = venues.id) WHERE band_id = @BandId;", conn);
+
+      SqlParameter bandIdParameter = new SqlParameter();
+      bandIdParameter.ParameterName = "@BandId";
+      bandIdParameter.Value = this.GetId();
+      cmd.Parameters.Add(bandIdParameter);
+
+      rdr=cmd.ExecuteReader();
+
+      List<Venue> foundVenues = new List<Venue>{};
+
+      while(rdr.Read())
+      {
+        int foundId = rdr.GetInt32(0);
+        string foundName = rdr.GetString(1);
+        Venue foundVenue = new Venue(foundName, foundId);
+        foundVenues.Add(foundVenue);
+      }
+
+      if(rdr!=null) rdr.Close();
+      if(conn!=null) conn.Close();
+
+      return foundVenues;
+    }
   }
 }
