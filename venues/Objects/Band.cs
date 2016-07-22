@@ -112,6 +112,29 @@ namespace BandTracker.Objects
       if (conn != null) conn.Close();
       return newBand;
     }
+    public void Update(string newName)
+    {
+      _name = newName;
+
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("UPDATE bands SET name=@NewName WHERE id=@BandId;", conn);
+
+      SqlParameter bandIdParameter = new SqlParameter();
+      bandIdParameter.ParameterName = "@BandId";
+      bandIdParameter.Value = this.GetId();
+      cmd.Parameters.Add(bandIdParameter);
+
+      SqlParameter nameParameter = new SqlParameter();
+      nameParameter.ParameterName = "@NewName";
+      nameParameter.Value = newName;
+      cmd.Parameters.Add(nameParameter);
+
+      cmd.ExecuteNonQuery();
+
+      if(conn!=null) conn.Close();
+    }
     public void Delete()
     {
       SqlConnection conn = DB.Connection();

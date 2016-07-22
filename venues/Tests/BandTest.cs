@@ -56,6 +56,18 @@ namespace BandTracker.Tests
       Assert.Equal(newBand, foundBand);
     }
     [Fact]
+    public void Band_Update_UpdatesBand()
+    {
+      Band firstBand = new Band("Ween");
+      firstBand.Save();
+
+      firstBand.Update("Dexy's Midnight Runners");
+
+      Band resultBand = Band.Find(firstBand.GetId());
+
+      Assert.Equal("Dexy's Midnight Runners", resultBand.GetName());
+    }
+    [Fact]
     public void Test_DeleteOne_DeletesASpecificBandObject()
     {
       //Arrange
