@@ -7,20 +7,56 @@
   <body>
     <h1>@Model.GetName()</h1>
     <h2>Shows:</h2>
-    @if(Model.GetVenues().Count==0)
+    <h2>Upcoming Shows:</h2>
+    @{int index=0;}
+    @if(Model.GetShowDates().Count==0 || DateTime.Compare(DateTime.Today,Model.GetShowDates()[0])>0)
     {
       <p>
-        No shows have been played by this band yet
+        No upcoming shows by this band
       </p>
     }
     else
     {
       <ul>
-        @for(int i=0; i < Model.GetVenues().Count ; i++)
+        @for(int i=0; i < Model.GetVenues().Count; i++)
         {
-          <li><a href="/venues/@Model.GetVenues()[i].GetId()">@Model.GetVenues()[i].GetName()</a>  @Model.GetShowDates()[i]</li>
+          @if(DateTime.Compare(DateTime.Today,Model.GetShowDates()[i])<=0)
+          {
+            <li>
+              <a href="/venues/@Model.GetVenues()[i].GetId()">@Model.GetVenues()[i].GetName()</a>  @Model.GetShowDates()[i]
+              <form action="/bands/@Model.GetId()/showdeleted" method="post">
+                <input type="hidden" name="venue" value="@Model.GetVenues()[i].GetId()">
+                <input type="hidden" name="show-date" value="@Model.GetShowDates()[i]">
+                <button type="submit">Delete Show</button>
+              </form>
+            </li>
+            index++;
+          }
         }
-    </ul>
+      </ul>
+    }
+    <h2>Previous Shows:</h2>
+    @if(Model.GetShowDates().Count==index)
+    {
+      <p>
+        No shows have been played by this band
+      </p>
+    }
+    else
+    {
+      <ul>
+        @for(int i=index; i < Model.GetVenues().Count; i++)
+        {
+          <li>
+            <a href="/venues/@Model.GetVenues()[i].GetId()">@Model.GetVenues()[i].GetName()</a>  @Model.GetShowDates()[i]
+            <form action="/bands/@Model.GetId()/showdeleted" method="post">
+              <input type="hidden" name="venue" value="@Model.GetVenues()[i].GetId()">
+              <input type="hidden" name="show-date" value="@Model.GetShowDates()[i]">
+              <button type="submit">Delete Show</button>
+            </form>
+          </li>
+        }
+      </ul>
     }
     <h4>Edit Band</h4>
     <form class="form-group" action="/bands/@Model.GetId()" method="post">

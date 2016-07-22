@@ -184,13 +184,40 @@ namespace BandTracker.Objects
 
       if(conn!=null) conn.Close();
     }
+    public void DeleteShow(int venueId, DateTime date)
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("DELETE FROM shows WHERE venue_id=@VenueId AND band_id=@BandId AND date=@Date;", conn);
+
+      SqlParameter venueIdParameter = new SqlParameter();
+      venueIdParameter.ParameterName = "@VenueId";
+      venueIdParameter.Value = venueId;
+      cmd.Parameters.Add(venueIdParameter);
+
+      SqlParameter bandIdParameter = new SqlParameter();
+      bandIdParameter.ParameterName = "@BandId";
+      bandIdParameter.Value = this.GetId();
+      cmd.Parameters.Add(bandIdParameter);
+
+      SqlParameter dateParameter = new SqlParameter();
+      dateParameter.ParameterName = "@Date";
+      dateParameter.Value = date;
+      cmd.Parameters.Add(dateParameter);
+
+
+      cmd.ExecuteNonQuery();
+
+      if(conn!=null) conn.Close();
+    }
     public List<Venue> GetVenues()
     {
       SqlConnection conn = DB.Connection();
       SqlDataReader rdr = null;
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("SELECT venues.* FROM bands JOIN shows ON (shows.band_id = bands.id) JOIN venues ON (shows.venue_id = venues.id) WHERE band_id = @BandId ORDER BY shows.date;", conn);
+      SqlCommand cmd = new SqlCommand("SELECT venues.* FROM bands JOIN shows ON (shows.band_id = bands.id) JOIN venues ON (shows.venue_id = venues.id) WHERE band_id = @BandId ORDER BY shows.date DESC;", conn);
 
       SqlParameter bandIdParameter = new SqlParameter();
       bandIdParameter.ParameterName = "@BandId";
@@ -220,7 +247,7 @@ namespace BandTracker.Objects
       SqlDataReader rdr;
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("SELECT date FROM shows WHERE band_id = @BandId ORDER BY date;", conn);
+      SqlCommand cmd = new SqlCommand("SELECT date FROM shows WHERE band_id = @BandId ORDER BY date DESC;", conn);
 
       SqlParameter bandIdParameter = new SqlParameter();
       bandIdParameter.ParameterName = "@BandId";

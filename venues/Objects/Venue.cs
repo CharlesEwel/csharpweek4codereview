@@ -185,13 +185,40 @@ namespace BandTracker.Objects
 
       if(conn!=null) conn.Close();
     }
+    public void DeleteShow(int bandId, DateTime date)
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("DELETE FROM shows WHERE venue_id=@VenueId AND band_id=@BandId AND date=@Date;", conn);
+
+      SqlParameter venueIdParameter = new SqlParameter();
+      venueIdParameter.ParameterName = "@VenueId";
+      venueIdParameter.Value = this.GetId();
+      cmd.Parameters.Add(venueIdParameter);
+
+      SqlParameter bandIdParameter = new SqlParameter();
+      bandIdParameter.ParameterName = "@BandId";
+      bandIdParameter.Value = bandId;
+      cmd.Parameters.Add(bandIdParameter);
+
+      SqlParameter dateParameter = new SqlParameter();
+      dateParameter.ParameterName = "@Date";
+      dateParameter.Value = date;
+      cmd.Parameters.Add(dateParameter);
+
+
+      cmd.ExecuteNonQuery();
+
+      if(conn!=null) conn.Close();
+    }
     public List<Band> GetBands()
     {
       SqlConnection conn = DB.Connection();
       SqlDataReader rdr = null;
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("SELECT bands.* FROM venues JOIN shows ON (shows.venue_id = venues.id) JOIN bands ON (shows.band_id = bands.id) WHERE venue_id = @VenueId ORDER BY shows.date;", conn);
+      SqlCommand cmd = new SqlCommand("SELECT bands.* FROM venues JOIN shows ON (shows.venue_id = venues.id) JOIN bands ON (shows.band_id = bands.id) WHERE venue_id = @VenueId ORDER BY shows.date DESC;", conn);
 
       SqlParameter venueIdParameter = new SqlParameter();
       venueIdParameter.ParameterName = "@VenueId";
@@ -221,7 +248,7 @@ namespace BandTracker.Objects
       SqlDataReader rdr;
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("SELECT date FROM shows WHERE venue_id = @VenueId ORDER BY date;", conn);
+      SqlCommand cmd = new SqlCommand("SELECT date FROM shows WHERE venue_id = @VenueId ORDER BY date DESC;", conn);
 
       SqlParameter venueIdParameter = new SqlParameter();
       venueIdParameter.ParameterName = "@VenueId";

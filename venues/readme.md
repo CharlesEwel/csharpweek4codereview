@@ -29,6 +29,7 @@ The program should ... | Example Input | Example Output | Why'd we choose this?
 Allow user to add bands and venues| User fills out a form with band/venue information | That band/venue is added to it's respective list | This is the basic functionality for save, get all, and find for our band classes.
 Allow user to edit and delete individual venues |Change venue's name from "Joe's" to "Charlie's"| The venue now listed as Joe's will become known as Charlie's | Allows us to test CRUD for venues
 Allow user to add show| User enters a band and venue name in a 'add show' form | That band will be added to the list of bands who have played that venue, and that venue will be added to the list of venues played by that band | This allows us to implement the many to many relationship between bands and venues
+Include a date for a given show | User enters a date and time when creating a show | That date will be displayed alongside the show, which are listed in chronoligcal order and split up into past and future shows| It let's us use order by in SQL and add more information to our list
 
 ## Support and Contact Details
 

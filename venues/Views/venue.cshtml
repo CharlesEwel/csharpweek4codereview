@@ -3,24 +3,62 @@
   <head>
     <meta charset="utf-8">
     <title>@Model.GetName()</title>
+    @using System;
   </head>
   <body>
     <h1>@Model.GetName()</h1>
-    <h2>Shows:</h2>
-    @if(Model.GetBands().Count==0)
+    <h2>Upcoming Shows:</h2>
+    @{int index=0;}
+    @if(Model.GetShowDates().Count==0 || DateTime.Compare(DateTime.Today,Model.GetShowDates()[0])>0)
     {
       <p>
-        No shows have been played here yet
+        No upcoming shows at this venue
       </p>
     }
     else
     {
       <ul>
-      @for(int i=0; i < Model.GetBands().Count; i++)
-      {
-        <li><a href="/bands/@Model.GetBands()[i].GetId()">@Model.GetBands()[i].GetName()</a>  @Model.GetShowDates()[i]</li>
-      }
-    </ul>
+        @for(int i=0; i < Model.GetBands().Count; i++)
+        {
+          @if(DateTime.Compare(DateTime.Today,Model.GetShowDates()[i])<=0)
+          {
+            <li>
+              <a href="/bands/@Model.GetBands()[i].GetId()">@Model.GetBands()[i].GetName()</a>
+              @Model.GetShowDates()[i]
+              <form action="/venues/@Model.GetId()/showdeleted" method="post">
+                <input type="hidden" name="band" value="@Model.GetBands()[i].GetId()">
+                <input type="hidden" name="show-date" value="@Model.GetShowDates()[i]">
+                <button type="submit">Cancel Show</button>
+              </form>
+            </li>
+            index++;
+          }
+        }
+      </ul>
+    }
+    <h2>Previous Shows:</h2>
+    @if(Model.GetShowDates().Count==index)
+    {
+      <p>
+        No shows have been played yet at this venue
+      </p>
+    }
+    else
+    {
+      <ul>
+        @for(int i=index; i < Model.GetBands().Count; i++)
+        {
+          <li>
+            <a href="/bands/@Model.GetBands()[i].GetId()">@Model.GetBands()[i].GetName()</a>
+            @Model.GetShowDates()[i]
+            <form action="/venues/@Model.GetId()/showdeleted" method="post">
+              <input type="hidden" name="band" value="@Model.GetBands()[i].GetId()">
+              <input type="hidden" name="show-date" value="@Model.GetShowDates()[i]">
+              <button type="submit">Delete Show</button>
+            </form>
+          </li>
+        }
+      </ul>
     }
     <h4>Edit Venue:</h4>
     <form class="form-group" action="/venues/@Model.GetId()" method="post">

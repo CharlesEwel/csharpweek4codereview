@@ -59,8 +59,14 @@ namespace BandTracker
       Post["/bands/{id}/showadded"] = parameters =>
       {
         Band currentBand = Band.Find(parameters.id);
-        DateTime showDate = new DateTime(2012, 12, 21);
         currentBand.AddShow(Request.Form["venue"], Request.Form["show-date"]);
+        return View["band.cshtml", currentBand];
+      };
+
+      Post["/bands/{id}/showdeleted"] = parameters =>
+      {
+        Band currentBand = Band.Find(parameters.id);
+        currentBand.DeleteShow(Request.Form["venue"], Request.Form["show-date"]);
         return View["band.cshtml", currentBand];
       };
 
@@ -95,6 +101,7 @@ namespace BandTracker
       Delete["venues/{id}"] = parameters =>
       {
         Venue currentVenue = Venue.Find(parameters.id);
+        currentVenue.Delete();
         List<Venue> allVenues = Venue.GetAll();
         return View["venues.cshtml", allVenues];
       };
@@ -102,8 +109,14 @@ namespace BandTracker
       Post["/venues/{id}/showadded"] = parameters =>
       {
         Venue currentVenue = Venue.Find(parameters.id);
-        DateTime showDate = new DateTime(2012, 12, 21);
         currentVenue.AddShow(Request.Form["band"], Request.Form["show-date"]);
+        return View["venue.cshtml", currentVenue];
+      };
+
+      Post["/venues/{id}/showdeleted"] = parameters =>
+      {
+        Venue currentVenue = Venue.Find(parameters.id);
+        currentVenue.DeleteShow(Request.Form["band"], Request.Form["show-date"]);
         return View["venue.cshtml", currentVenue];
       };
     }
